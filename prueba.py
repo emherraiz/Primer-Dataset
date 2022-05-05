@@ -33,13 +33,15 @@ def cifra_significativa(media, error_total):
 
         redondeo *= 10
 
-        if (redondeo*10) % 5 == 0:
+        if (redondeo) % 5 == 0:
             if par_true(redondeo):
                 redondeo = ceil(redondeo)
             else:
                 redondeo = floor(redondeo)
 
-print(cifra_significativa)
+
+
+print(round(5.54950285, 0))
 
 
 
