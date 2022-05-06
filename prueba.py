@@ -106,17 +106,21 @@ print(error_total)
 
 # Las medidas son una lista compuesta por la media y el error total
 def medidas_indirectas_error(media_longitud, error_longitud, media_tiempo, error_tiempo):
-    g_sin_error = 2*media_longitud/pow(media_tiempo, 2)
-
+    g_sin_error = 2 * media_longitud / pow(media_tiempo, 2)
+    print(g_sin_error)
     # Ajustamos por logaritmos para obtener el error y nos queda de la siguiente forma:
     error = g_sin_error*((error_longitud/media_longitud) - 2 * (error_tiempo / media_tiempo))
+
+    # Valor absoulto del error
+    if error < 0:
+        error *= -1
 
     # Redondeamos por el criterio anteriormente usado
     cifra_significativa = ultima_cifra_significativa(error)
     error_final = round(error, cifra_significativa)
     g = round(g_sin_error, cifra_significativa)
 
-
     return g, error_final
+
 
 
