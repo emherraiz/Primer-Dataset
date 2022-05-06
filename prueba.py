@@ -1,19 +1,7 @@
 from math import ceil, floor
 import numpy as np
 from sympy import *
-
-
-a = [1, 3, 4, 5, 6, 7]
-b = [2]
-c = 0.00304
-
-
-
-def par_true(numero):
-    if numero % 2 == 0:
-        return True
-    else:
-        return False
+import matplotlib.pyplot as plt
 
 
 def validar_resultados(lista, media, desviacion_tipica):
@@ -64,9 +52,6 @@ def ultima_cifra_significativa(numero):
     return n
 
 
-
-
-
 def medidas_directas_error(lista, error_inicial = 0, resolucion = 0):
     # Si tuvieramos nuestro aparato presentara algún error inicial debemos quitarselo a todas nuestras mediciones
     if error_inicial != 0:
@@ -112,9 +97,6 @@ def medidas_directas_error(lista, error_inicial = 0, resolucion = 0):
     media = round(media, cifra_significativa)
 
     return media, error_total
-
-media , error_total  = medidas_directas_error([1.34, 2, 4.2, 6.4859, 3.2])
-print(error_total)
 
 # De nuestra función despejamos la g, que es lo que queremos calcular
 # g = 2*L/t^2
