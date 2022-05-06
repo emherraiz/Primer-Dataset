@@ -1,10 +1,13 @@
 from math import ceil, floor
 import numpy as np
+from sympy import *
 
 
 a = [1, 3, 4, 5, 6, 7]
 b = [2]
-print(6.4 % 2)
+c = 0.00304
+
+
 
 def par_true(numero):
     if numero % 2 == 0:
@@ -22,26 +25,45 @@ def validar_resultados(lista, media, desviacion_tipica):
 
     return lista, repetir
 
-# Criterio ASTM - E29, se podrían utilizar criterios más faciles
-def cifra_significativa(media, error_total):
-    if error_total < 1:
-        decimal = 0
-        redondeo = error_total
-        while floor(redondeo) == 0:
+
+# No lo acabe me dí cuenta que round ya lo incluía :=(
+    def cifra_significativa(media, error_total):
+        if error_total < 1:
+            decimal = 0
+            redondeo = error_total
+            while floor(redondeo) == 0:
+                redondeo *= 10
+                decimal += 1
+
             redondeo *= 10
-            decimal += 1
 
-        redondeo *= 10
-
-        if (redondeo) % 5 == 0:
-            if par_true(redondeo):
-                redondeo = ceil(redondeo)
-            else:
-                redondeo = floor(redondeo)
+            if (redondeo) % 5 == 0:
+                if par_true(redondeo):
+                    redondeo = ceil(redondeo)
+                else:
+                    redondeo = floor(redondeo)
 
 
+# Obtenemos la posición de la ultima_cifra_significativa
+def ultima_cifra_significativa(numero):
+    if numero > 1:
+        n = 1
+        while floor(numero) != 0:
+            numero /= 10
+            n -= 1
 
-print(round(5.54950285, 0))
+    elif floor(numero) == 0 and numero != 0:
+        n = 0
+        while floor(numero) == 0:
+            numero *= 10
+            n += 1
+
+    else:
+        n = 0
+
+    return n
+
+
 
 
 
@@ -83,8 +105,33 @@ def medidas_directas_error(lista, error_inicial = 0, resolucion = 0):
     # Calculamos el error total
     error_total = ECM + resolucion
 
-    return error_total
+    # Redondeamos el error y la media a partir de la ultima cifra significativa
+    # Criterio ASTM - E29
+    cifra_significativa = ultima_cifra_significativa(error_total)
+    error_total = round(error_total, cifra_significativa)
+    media = round(media, cifra_significativa)
+
+    return media, error_total
+
+media , error_total  = medidas_directas_error([1.34, 2, 4.2, 6.4859, 3.2])
+print(error_total)
+
+# De nuestra función despejamos la g, que es lo que queremos calcular
+# g = 2*L/t^2
+
+# Las medidas son una lista compuesta por la media y el error total
+def medidas_indirectas_error(media_longitud, error_longitud, media_tiempo, error_tiempo):
+    g_sin_error = 2*media_longitud/pow(media_tiempo, 2)
+
+    # Ajustamos por logaritmos para obtener el error y nos queda de la siguiente forma:
+    error = g_sin_error*((error_longitud/media_longitud) - 2 * (error_tiempo / media_tiempo))
+
+    # Redondeamos por el criterio anteriormente usado
+    cifra_significativa = ultima_cifra_significativa(error)
+    error_final = round(error, cifra_significativa)
+    g = round(g_sin_error, cifra_significativa)
 
 
-print(medidas_directas_error([1.34, 2, 4.2, 6.4859, 3.2]))
+    return g, error_final
+
 
