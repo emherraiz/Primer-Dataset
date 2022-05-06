@@ -1,7 +1,7 @@
 from math import ceil, floor
 import numpy as np
 from sympy import *
-import matplotlib.pyplot as plt
+
 
 
 def validar_resultados(lista, media, desviacion_tipica):
@@ -14,7 +14,8 @@ def validar_resultados(lista, media, desviacion_tipica):
     return lista, repetir
 
 
-# No lo acabe me dí cuenta que round ya lo incluía :=(
+# No lo acabe me dí cuenta que round ya lo incluía el criterio que estamos usando :=(
+# Unicamente necesitamos sacar la posición de la ultima cifra significativa
     def cifra_significativa(media, error_total):
         if error_total < 1:
             decimal = 0
@@ -99,13 +100,17 @@ def medidas_directas_error(lista, error_inicial = 0, resolucion = 0):
 
     return media, error_total
 
-media , error_total = medidas_directas_error([7.42, 10.94, 4.62, 6.86, 3.69, 9.82, 6.36, 5.57, 4.49, 6.5, 5.1, 9.6, 9.09, 9.34, 4.36, 10.01, 5.76, 19.53, 4.65, 8.23, 10.86, 6.88, 15.77, 4.57, 10.38, 10.98, 10.85], .13)
-print(error_total)
 # De nuestra función despejamos la g, que es lo que queremos calcular
 # g = 2*L/t^2
 
 # Las medidas son una lista compuesta por la media y el error total
 def medidas_indirectas_error(media_longitud, error_longitud, media_tiempo, error_tiempo):
+    '''Esta función solo es válida para nuestra formula, en caso de tener otra tendríamos que buscar el error de otra manera
+    ya sea de manera directa, usando logaritmos o funciones trigonométricas.
+    Para ello necesitamos sacar las derivadas parciales de la formula y junto a la media calculada previamente sacar el error'''
+
+    # Sacamos la media de g
+    # g = 2*L/t^2
     g_sin_error = 2 * media_longitud / pow(media_tiempo, 2)
     print(g_sin_error)
     # Ajustamos por logaritmos para obtener el error y nos queda de la siguiente forma:
