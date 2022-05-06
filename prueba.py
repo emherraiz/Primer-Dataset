@@ -53,11 +53,6 @@ def ultima_cifra_significativa(numero):
 
 
 def medidas_directas_error(lista, error_inicial = 0, resolucion = 0):
-    # Si tuvieramos nuestro aparato presentara algún error inicial debemos quitarselo a todas nuestras mediciones
-    if error_inicial != 0:
-        for i in range(len(lista)):
-            lista[i] = lista[i] - error_inicial
-
     # Calculamos la media y la desviacion típica.
     # He utilizado numpy aunque existen más modulos que nos proporcionan estas funciones.
     # Se pueden crear funciones para la media y desviación de manera muy sencilla.
@@ -69,7 +64,13 @@ def medidas_directas_error(lista, error_inicial = 0, resolucion = 0):
     # En caso de que no lo fueran los eliminamos y volvemos a hacer todo el procedimiento mediante recursividad
     lista, repetir = validar_resultados(lista, media, desviacion_tipica)
     if repetir:
-        medidas_directas_error(lista, resolucion = resolucion)
+        media, error_total = medidas_directas_error(lista, error_inicial, resolucion)
+
+    if 'error_total' in locals():
+        return media, error_total
+
+    # Si tuvieramos nuestro aparato presentara algún error inicial debemos quitarselo a todas nuestras mediciones
+    media -= error_inicial
 
     # Ahora calculamos el error cuadratico medio que en el caso de que tengamos un solo elemento sabemos que va a ser cero
     ECM = desviacion_tipica / np.sqrt(len(lista))
@@ -98,6 +99,8 @@ def medidas_directas_error(lista, error_inicial = 0, resolucion = 0):
 
     return media, error_total
 
+media , error_total = medidas_directas_error([7.42, 10.94, 4.62, 6.86, 3.69, 9.82, 6.36, 5.57, 4.49, 6.5, 5.1, 9.6, 9.09, 9.34, 4.36, 10.01, 5.76, 19.53, 4.65, 8.23, 10.86, 6.88, 15.77, 4.57, 10.38, 10.98, 10.85], .13)
+print(error_total)
 # De nuestra función despejamos la g, que es lo que queremos calcular
 # g = 2*L/t^2
 
