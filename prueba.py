@@ -1,4 +1,4 @@
-from math import ceil, floor
+from math import floor
 import numpy as np
 from sympy import *
 
@@ -12,25 +12,6 @@ def validar_resultados(lista, media, desviacion_tipica):
             repetir = True
 
     return lista, repetir
-
-
-# No lo acabe me dí cuenta que round ya lo incluía el criterio que estamos usando :=(
-# Unicamente necesitamos sacar la posición de la ultima cifra significativa
-    def cifra_significativa(media, error_total):
-        if error_total < 1:
-            decimal = 0
-            redondeo = error_total
-            while floor(redondeo) == 0:
-                redondeo *= 10
-                decimal += 1
-
-            redondeo *= 10
-
-            if (redondeo) % 5 == 0:
-                if par_true(redondeo):
-                    redondeo = ceil(redondeo)
-                else:
-                    redondeo = floor(redondeo)
 
 
 # Obtenemos la posición de la ultima_cifra_significativa
